@@ -1,0 +1,33 @@
+
+CC = gcc
+CFLAGS = -Wall -ansi -pedantic
+CPPFLAGS = -Iinclude
+LDFLAGS = -lm
+
+
+SRC = src
+
+EXEC_QUANTIF = quantif
+EXEC_HIST = ppmhist
+
+
+all: $(EXEC_QUANTIF) $(EXEC_HIST)
+
+
+# 1. Compilation de QUANTIF
+OBJS_QUANTIF = $(SRC)/main.o $(SRC)/quantification.o $(SRC)/histogram.o $(SRC)/image.o
+
+$(EXEC_QUANTIF): $(OBJS_QUANTIF)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+# 2. Compilation de PPMHIST
+OBJS_HIST = $(SRC)/ppmhist.o $(SRC)/histogram.o $(SRC)/image.o
+
+$(EXEC_HIST): $(OBJS_HIST)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+$(SRC)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(SRC)/*.o $(EXEC_QUANTIF) $(EXEC_HIST)
